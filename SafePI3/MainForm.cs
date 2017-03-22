@@ -84,8 +84,11 @@ namespace SafePI3
             }
             else
             {
+                Manager.LoadSetupFile();
+                Manager.StartQueue();
                 RunningQueue = true;
                 PlayButton.BackgroundImage = new Bitmap(Application.StartupPath + "\\Assets\\Images\\Stop.png");
+                
             }
             
             

@@ -11,6 +11,7 @@ namespace SafePI3.Classes
     public class Queue : IQueue, IDisposable
     {
         private List<Client> _Clients;
+        private int _TimePerClient;
         public List<Client> Clients
         {
            get
@@ -123,7 +124,7 @@ namespace SafePI3.Classes
             }
         }
 
-        public Queue(string label , string name , int operatorsQuantity , int queuesQuantity , int serviceDesksQuantity , List<Client> clients)
+        public Queue(string label , string name , int operatorsQuantity , int queuesQuantity , int serviceDesksQuantity , List<Client> clients, int timePerClient)
         {
             _Label = label;
             _Name = name;
@@ -131,6 +132,7 @@ namespace SafePI3.Classes
             _QueuesQuantity = queuesQuantity;
             _ServiceDesksQuantity = serviceDesksQuantity;
             _Clients = clients;
+            _TimePerClient = timePerClient;
         }
 
         public void Dispose()
