@@ -19,11 +19,11 @@ namespace SafePI3
 {
     public partial class MainForm : Form
     {
-        
-        public Dictionary<string, Queue> Queues;
+
+        QueueManager Manager = new QueueManager();
+        bool RunningQueue = false;
         public MainForm()
         {
-            Queues = new Dictionary<string, Queue>();
             this.StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
 
@@ -54,8 +54,11 @@ namespace SafePI3
             if (!String.IsNullOrWhiteSpace(FileName))
             {
                 Utils.Utils.CopyFile("Setup.txt", FileName, Application.StartupPath + "\\Configs\\");
+                if (!Utils.Utils.ValidateSetupFile())
+                    File.Delete(Application.StartupPath + "\\Configs\\Setup.txt");
+                else
+                    MessageBox.Show("Arquivo Setup carregado com sucesso", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
 
         private void arquivoFilaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -65,12 +68,27 @@ namespace SafePI3
             if (!String.IsNullOrWhiteSpace(FileName))
             {
                 Utils.Utils.CopyFile("Queue.txt", FileName, Application.StartupPath + "\\Configs\\");
+                if (!Utils.Utils.ValidateQueueFile())
+                    File.Delete(Application.StartupPath + "\\Configs\\Fila.txt");
+                else
+                    MessageBox.Show("Arquivo Setup carregado com sucesso", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
-
+            if (RunningQueue)
+            {
+                RunningQueue = false;
+                PlayButton.BackgroundImage = new Bitmap(Application.StartupPath + "\\Assets\\Images\\Play.png");
+            }
+            else
+            {
+                RunningQueue = true;
+                PlayButton.BackgroundImage = new Bitmap(Application.StartupPath + "\\Assets\\Images\\Stop.png");
+            }
+            
+            
         }
 
         private void Faster1Button_Click(object sender, EventArgs e)
@@ -81,6 +99,20 @@ namespace SafePI3
         private void Faster3Button_Click(object sender, EventArgs e)
         {
 
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (Directory.Exists(Application.StartupPath + "//Configs"))
+                Directory.Delete(Application.StartupPath + "//Configs", true);
+            base.OnClosing(e);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            if(Directory.Exists(Application.StartupPath + "//Configs"))
+                Directory.Delete(Application.StartupPath + "//Configs", true);
+            base.OnLoad(e);
         }
     }
 }

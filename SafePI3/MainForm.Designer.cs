@@ -76,14 +76,14 @@
             // arquivoSetupToolStripMenuItem
             // 
             this.arquivoSetupToolStripMenuItem.Name = "arquivoSetupToolStripMenuItem";
-            this.arquivoSetupToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.arquivoSetupToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.arquivoSetupToolStripMenuItem.Text = "Arquivo Setup";
             this.arquivoSetupToolStripMenuItem.Click += new System.EventHandler(this.arquivoSetupToolStripMenuItem_Click);
             // 
             // arquivoFilaToolStripMenuItem
             // 
             this.arquivoFilaToolStripMenuItem.Name = "arquivoFilaToolStripMenuItem";
-            this.arquivoFilaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.arquivoFilaToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.arquivoFilaToolStripMenuItem.Text = "Arquivo Fila";
             this.arquivoFilaToolStripMenuItem.Click += new System.EventHandler(this.arquivoFilaToolStripMenuItem_Click);
             // 

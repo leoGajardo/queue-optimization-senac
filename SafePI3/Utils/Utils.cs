@@ -5,16 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using SafePI3.Classes;
+using System.Text.RegularExpressions;
 
 namespace SafePI3.Utils
 {
     public static class Utils
     {
-
-        static public int getTotalClients(this MainForm form)
-        {
-            return form.Queues.Sum(a => a.Value.Clients.Count);
-        }
 
         static public string PickFile(string filters, string title)
         {
@@ -35,7 +32,6 @@ namespace SafePI3.Utils
             {
                 Directory.CreateDirectory(dest);
                 File.Copy(source, dest + filename, true);
-                MessageBox.Show("Arquivo copiado para o sistema com sucesso", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception e)
             {
@@ -44,11 +40,120 @@ namespace SafePI3.Utils
             }
         }
 
-        static public void ReadSetupFile()
+        static public bool ValidateSetupFile()
         {
+            if (!File.Exists(Application.StartupPath + "\\Configs\\Setup.txt"))
+            {
+                MessageBox.Show("Arquivo de Setup não existente, por favor selecione um", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            StreamReader file = new StreamReader(Application.StartupPath + "\\Configs\\Setup.txt");
+            string line = "";
+            // primeira linha
+            line = file.ReadLine();
+            int atendentesNumero = 0;
+            if (!Int32.TryParse(line, out atendentesNumero)) { 
+                MessageBox.Show("Problema na leitura do número de atendentes", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                file.Close();
+                return false;
+            }
+            // segunda linha
+            List<char> postos = new List<char>();
+            line = file.ReadLine();
+            postos.AddRange(line.Split(':')[1].ToCharArray());
+            if(postos.Count() < 5 || postos.Count() > 20) { 
+                MessageBox.Show("Número de postos não atende as regras", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                file.Close();
+                return false;
+            }
+
+
+            //terceira linha
+            List<char> atendentes = new List<char>();
+            line = file.ReadLine();
+            atendentes.AddRange(line.Split(':')[1].ToCharArray());
+            if (atendentes.Count() != atendentesNumero)
+            {
+                MessageBox.Show("Número de atendentes não corresponde a disposição dos mesmos nos postos", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                file.Close();
+                return false;
+            }
+
+            //quarta linha
+            line = file.ReadLine();
+            int troca = 0;
+            if(!Int32.TryParse(line.Split(':')[1], out troca))
+            {
+                MessageBox.Show("Problema na leitura do valor da troca", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                file.Close();
+                return false;
+            }
+
+            //postos
+            while ((line = file.ReadLine()) != null)
+            {
+                char posto;
+                int tempo = 0;
+
+                if(!Char.TryParse(line.Split(':')[0].Substring(0, 1), out posto) || !postos.Contains(posto))
+                {
+                    MessageBox.Show("Problema na leitura dos postos e seus tempos", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    file.Close();
+                    return false;
+                }
+
+                if(!Int32.TryParse(line.Split(':')[0].Substring(1), out tempo)){
+                    MessageBox.Show("Problema na leitura dos postos e seus tempos", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    file.Close();
+                    return false;
+                }
+
+            }
+            file.Close();
+            return true;
+        }
+
+        static public bool ValidateQueueFile()
+        {
+            if (!File.Exists(Application.StartupPath + "\\Configs\\Queue.txt"))
+            {
+                MessageBox.Show("Arquivo de Fila não existente, por favor selecione um", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (!File.Exists(Application.StartupPath + "\\Configs\\Setup.txt"))
+            {
+                MessageBox.Show("Arquivo de Setup não existente, é preciso selecionar o Setup antes do arquivo de fila", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            StreamReader file = new StreamReader(Application.StartupPath + "\\Configs\\Queue.txt");
+         
+            string line = "";
+            string pattern = "";
+
+            StreamReader setup = new StreamReader(Application.StartupPath + "\\Configs\\Setup.txt");
+            // primeira linha
+            line = setup.ReadLine();
+            line = setup.ReadLine();
+            List<char> postos = new List<char>();
+            postos.AddRange(line.Split(':')[1].ToCharArray().Distinct().Skip(1));
+            setup.Close();
             
-
-
+            
+            string patternEnd = @"+C[\d]+A[" + string.Join("{1}]?[", postos) + @"{1}]?$";
+            int UNumber = 1;
+            while ((line = file.ReadLine()) != null) { 
+                pattern = "^U" + UNumber + patternEnd;
+                if (!Regex.Match(line.Trim(), pattern).Success) {
+                    MessageBox.Show("Existe alguma inconsistencia no arquivo de fila na linha: " + UNumber, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    file.Close();
+                    return false;
+                }
+                UNumber++;
+            }
+            file.Close();
+            return true;
         }
     }
 
