@@ -1,6 +1,6 @@
 ﻿namespace SafePI3.UserControls
 {
-    partial class PipeUC
+    partial class QueueUC
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,26 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.PipeName = new System.Windows.Forms.Label();
+            this.QueueName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // PipeName
+            // QueueName
             // 
-            this.PipeName.AutoSize = true;
-            this.PipeName.Location = new System.Drawing.Point(54, 17);
-            this.PipeName.Name = "PipeName";
-            this.PipeName.Size = new System.Drawing.Size(35, 13);
-            this.PipeName.TabIndex = 0;
-            this.PipeName.Text = "label1";
-            this.PipeName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.QueueName.AutoSize = true;
+            this.QueueName.Location = new System.Drawing.Point(54, 17);
+            this.QueueName.Name = "QueueName";
+            this.QueueName.Size = new System.Drawing.Size(35, 13);
+            this.QueueName.TabIndex = 0;
+            this.QueueName.Text = "label1";
+            this.QueueName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // PipeUC
+            // QueueUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.Controls.Add(this.PipeName);
-            this.Name = "PipeUC";
+            this.Controls.Add(this.QueueName);
+            this.Name = "QueueUC";
             this.Size = new System.Drawing.Size(137, 315);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -56,6 +56,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label PipeName;
+        private System.Windows.Forms.Label QueueName;
     }
 }

@@ -13,7 +13,7 @@ namespace SafePI3.Utils
 
         static public int getTotalClients(this MainForm form)
         {
-            return form.Pipes.Sum(a => a.Value.Clients.Count);
+            return form.Queues.Sum(a => a.Value.Clients.Count);
         }
 
         static public string PickFile(string filters, string title)
@@ -42,6 +42,13 @@ namespace SafePI3.Utils
                 MessageBox.Show("Houve um erro ao tentar copiar o arquivo de configuração: " + e.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw;
             }
+        }
+
+        static public void ReadSetupFile()
+        {
+            
+
+
         }
     }
 

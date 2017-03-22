@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Client.cs" />
-    <Compile Include="Classes\Pipe.cs" />
+    <Compile Include="Classes\Queue.cs" />
     <Compile Include="Credits.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,14 +61,14 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IClient.cs" />
-    <Compile Include="Interfaces\IPipe.cs" />
+    <Compile Include="Interfaces\IQueue.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControls\PipeUC.cs">
+    <Compile Include="UserControls\QueueUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\PipeUC.Designer.cs">
-      <DependentUpon>PipeUC.cs</DependentUpon>
+    <Compile Include="UserControls\QueueUC.Designer.cs">
+      <DependentUpon>QueueUC.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\Utils.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -84,8 +84,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="UserControls\PipeUC.resx">
-      <DependentUpon>PipeUC.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\QueueUC.resx">
+      <DependentUpon>QueueUC.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

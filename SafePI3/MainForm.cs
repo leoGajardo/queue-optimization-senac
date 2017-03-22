@@ -20,17 +20,17 @@ namespace SafePI3
     public partial class MainForm : Form
     {
         
-        public Dictionary<string, Pipe> Pipes;
+        public Dictionary<string, Queue> Queues;
         public MainForm()
         {
-            Pipes = new Dictionary<string, Pipe>();
+            Queues = new Dictionary<string, Queue>();
             this.StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
 
-            //Pipe _pipe = new Pipe("Teste", "A", 3, 1, 3, new List<Client>());
-            //_pipe.PipeUserControl.Location = new Point(30, 30);
-            //this.Controls.Add(_pipe.PipeUserControl);
-            //Pipes.Add(_pipe.Name,_pipe);
+            //Queue _queue = new Queue("Teste", "A", 3, 1, 3, new List<Client>());
+            //_queue.QueueUserControl.Location = new Point(30, 30);
+            //this.Controls.Add(_queue.QueueUserControl);
+            //Queues.Add(_queue.Name,_queue);
  
            
         }
@@ -68,5 +68,19 @@ namespace SafePI3
             }
         }
 
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Faster1Button_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Faster3Button_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

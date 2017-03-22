@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SafePI3.Classes
 {
-    public class Pipe : IPipe, IDisposable
+    public class Queue : IQueue, IDisposable
     {
         private List<Client> _Clients;
         public List<Client> Clients
@@ -21,7 +21,7 @@ namespace SafePI3.Classes
             {
                 if (value != _Clients) { 
                     _Clients = value;
-                    UpdatePipeUserControl();
+                    UpdateQueueUserControl();
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace SafePI3.Classes
             {
                 if (value != _Name) { 
                     _Name = value;
-                    UpdatePipeUserControl();
+                    UpdateQueueUserControl();
                 }
             }
         }
@@ -53,23 +53,23 @@ namespace SafePI3.Classes
             {
                 if (value != _OperatorsQuantity) { 
                     _OperatorsQuantity = value;
-                    UpdatePipeUserControl();
+                    UpdateQueueUserControl();
                 }
             }
         }
 
-        private int _PipesQuantity;
-        public int PipesQuantity
+        private int _QueuesQuantity;
+        public int QueuesQuantity
         {
            get
             {
-                return _PipesQuantity;
+                return _QueuesQuantity;
             }
             set
             {
-                if (value != _PipesQuantity) { 
-                    _PipesQuantity = value;
-                    UpdatePipeUserControl();
+                if (value != _QueuesQuantity) { 
+                    _QueuesQuantity = value;
+                    UpdateQueueUserControl();
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace SafePI3.Classes
             {
                 if (value != _ServiceDesksQuantity) { 
                     _ServiceDesksQuantity = value;
-                    UpdatePipeUserControl();
+                    UpdateQueueUserControl();
                 }
             }
         }
@@ -101,46 +101,46 @@ namespace SafePI3.Classes
             {
                 if (value != _Label) { 
                     _Label = value;
-                    UpdatePipeUserControl();
+                    UpdateQueueUserControl();
                 }
             }
         }
 
-        private PipeUC _PipeUserControl;
-        public PipeUC PipeUserControl
+        private QueueUC _QueueUserControl;
+        public QueueUC QueueUserControl
         {
             get
             {
-                if (_PipeUserControl == null)
+                if (_QueueUserControl == null)
                 {
-                    _PipeUserControl = new PipeUC(this);
+                    _QueueUserControl = new QueueUC(this);
                 }
-                return _PipeUserControl;
+                return _QueueUserControl;
             }
             set
             {
-                _PipeUserControl = value;
+                _QueueUserControl = value;
             }
         }
 
-        public Pipe(string label , string name , int operatorsQuantity , int pipesQuantity , int serviceDesksQuantity , List<Client> clients)
+        public Queue(string label , string name , int operatorsQuantity , int queuesQuantity , int serviceDesksQuantity , List<Client> clients)
         {
             _Label = label;
             _Name = name;
             _OperatorsQuantity = operatorsQuantity;
-            _PipesQuantity = pipesQuantity;
+            _QueuesQuantity = queuesQuantity;
             _ServiceDesksQuantity = serviceDesksQuantity;
             _Clients = clients;
         }
 
         public void Dispose()
         {
-            PipeUserControl.Dispose();
+            QueueUserControl.Dispose();
         }
 
-        private void UpdatePipeUserControl()
+        private void UpdateQueueUserControl()
         {
-            PipeUserControl.UpdatePipe();
+            QueueUserControl.UpdateQueue();
         }
     }
 }

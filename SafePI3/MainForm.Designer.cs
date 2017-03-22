@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.opçõesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selecionarArquivosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -35,10 +36,9 @@
             this.arquivoFilaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.créditosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.PlayButton = new System.Windows.Forms.Button();
+            this.Faster1Button = new System.Windows.Forms.Button();
+            this.Faster3Button = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
@@ -99,41 +99,39 @@
             this.créditosToolStripMenuItem.Text = "Créditos";
             this.créditosToolStripMenuItem.Click += new System.EventHandler(this.creditosToolStripMenuItem_Click);
             // 
-            // button1
+            // PlayButton
             // 
-            this.button1.Location = new System.Drawing.Point(12, 463);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(49, 48);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.PlayButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PlayButton.BackgroundImage")));
+            this.PlayButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PlayButton.Location = new System.Drawing.Point(12, 433);
+            this.PlayButton.Name = "PlayButton";
+            this.PlayButton.Size = new System.Drawing.Size(86, 86);
+            this.PlayButton.TabIndex = 1;
+            this.PlayButton.UseVisualStyleBackColor = true;
+            this.PlayButton.Click += new System.EventHandler(this.PlayButton_Click);
             // 
-            // button2
+            // Faster1Button
             // 
-            this.button2.Location = new System.Drawing.Point(67, 463);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(49, 48);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.Faster1Button.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Faster1Button.BackgroundImage")));
+            this.Faster1Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Faster1Button.Location = new System.Drawing.Point(104, 433);
+            this.Faster1Button.Name = "Faster1Button";
+            this.Faster1Button.Size = new System.Drawing.Size(86, 86);
+            this.Faster1Button.TabIndex = 2;
+            this.Faster1Button.UseVisualStyleBackColor = true;
+            this.Faster1Button.Click += new System.EventHandler(this.Faster1Button_Click);
             // 
-            // button3
+            // Faster3Button
             // 
-            this.button3.Location = new System.Drawing.Point(122, 463);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(49, 48);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(177, 463);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(49, 48);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
+            this.Faster3Button.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Faster3Button.BackgroundImage")));
+            this.Faster3Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Faster3Button.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Faster3Button.Location = new System.Drawing.Point(196, 433);
+            this.Faster3Button.Name = "Faster3Button";
+            this.Faster3Button.Size = new System.Drawing.Size(86, 86);
+            this.Faster3Button.TabIndex = 3;
+            this.Faster3Button.UseVisualStyleBackColor = true;
+            this.Faster3Button.Click += new System.EventHandler(this.Faster3Button_Click);
             // 
             // label1
             // 
@@ -160,10 +158,9 @@
             this.ClientSize = new System.Drawing.Size(986, 523);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Faster3Button);
+            this.Controls.Add(this.Faster1Button);
+            this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
@@ -184,10 +181,9 @@
         private System.Windows.Forms.ToolStripMenuItem selecionarArquivosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem arquivoSetupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem arquivoFilaToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button PlayButton;
+        private System.Windows.Forms.Button Faster1Button;
+        private System.Windows.Forms.Button Faster3Button;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
     }

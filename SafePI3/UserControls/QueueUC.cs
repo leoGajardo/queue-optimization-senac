@@ -12,38 +12,38 @@ using SafePI3.Interfaces;
 namespace SafePI3.UserControls
 {
 
-    public partial class PipeUC : UserControl
+    public partial class QueueUC : UserControl
     {
         System.Windows.Forms.ProgressBar ProgressBar { get; set; }
         List<System.Windows.Forms.PictureBox> ServiceDesks { get; set; }
         private int _picHeight;
         private int _picWidth;
 
-        IPipe CurrentPipe;
-        public PipeUC(IPipe pipe)
+        IQueue CurrentQueue;
+        public QueueUC(IQueue queue)
         {
             _picHeight = 50;
             _picWidth = 50;
             InitializeComponent();
-            CurrentPipe = pipe;
-            this.Width = (CurrentPipe.ServiceDesksQuantity * _picWidth) + 40;
+            CurrentQueue = queue;
+            this.Width = (CurrentQueue.ServiceDesksQuantity * _picWidth) + 40;
 
-            PipeName.Text = CurrentPipe.Name;
-            PipeName.Left = (this.Width - PipeName.Width) / 2;
+            QueueName.Text = CurrentQueue.Name;
+            QueueName.Left = (this.Width - QueueName.Width) / 2;
 
             InitializeServiceDesks();
             InitializeProgressBar();
 
         }
-        public void UpdatePipe()
+        public void UpdateQueue()
         {
             UpdateServiceDesk();
             UpdateProgressBar();
         }
         private void InitializeServiceDesks()
         {
-            ServiceDesks = new List<PictureBox>(CurrentPipe.ServiceDesksQuantity);
-            for (int i = 0; i < CurrentPipe.ServiceDesksQuantity; i++)
+            ServiceDesks = new List<PictureBox>(CurrentQueue.ServiceDesksQuantity);
+            for (int i = 0; i < CurrentQueue.ServiceDesksQuantity; i++)
             {
                 ServiceDesks.Add(new PictureBox()
                 {
@@ -58,8 +58,8 @@ namespace SafePI3.UserControls
         }
         private void UpdateServiceDesk()
         {
-            ServiceDesks.Take(CurrentPipe.OperatorsQuantity).ToList().ForEach(a => a.Image = new Bitmap(Application.StartupPath + "\\Assets\\Images\\iconWorkDesk.jpg"));
-            ServiceDesks.Skip(CurrentPipe.OperatorsQuantity).ToList().ForEach(a => a.Image = new Bitmap(Application.StartupPath + "\\Assets\\Images\\iconEmptyDesk.png"));
+            ServiceDesks.Take(CurrentQueue.OperatorsQuantity).ToList().ForEach(a => a.Image = new Bitmap(Application.StartupPath + "\\Assets\\Images\\iconWorkDesk.jpg"));
+            ServiceDesks.Skip(CurrentQueue.OperatorsQuantity).ToList().ForEach(a => a.Image = new Bitmap(Application.StartupPath + "\\Assets\\Images\\iconEmptyDesk.png"));
             
         }
         private void InitializeProgressBar()
@@ -68,7 +68,7 @@ namespace SafePI3.UserControls
             ProgressBar.Height = 180;
             ProgressBar.Width = 30;
             ProgressBar.Top = 120;
-            ProgressBar.Left = (((CurrentPipe.ServiceDesksQuantity * _picWidth) + 40) / 2) - (ProgressBar.Width / 2);
+            ProgressBar.Left = (((CurrentQueue.ServiceDesksQuantity * _picWidth) + 40) / 2) - (ProgressBar.Width / 2);
             UpdateProgressBar();
             this.Controls.Add(ProgressBar);
         }

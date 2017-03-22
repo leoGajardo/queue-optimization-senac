@@ -8,13 +8,13 @@ using SafePI3.UserControls;
 
 namespace SafePI3.Interfaces
 {
-    public interface IPipe
+    public interface IQueue
     {
         string Name { get; set; }
 
         string Label { get; set;  }
 
-        int PipesQuantity { get; set; }
+        int QueuesQuantity { get; set; }
 
         int ServiceDesksQuantity { get; set; }
 
@@ -22,6 +22,6 @@ namespace SafePI3.Interfaces
 
         List<Client> Clients { get; set; }
         
-        PipeUC PipeUserControl { get; set; }
+        QueueUC QueueUserControl { get; set; }
     }
 }
