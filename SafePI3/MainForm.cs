@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,12 +44,29 @@ namespace SafePI3
 
         private void configuracoesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+           
         }
 
-        private void selecionarArquivosToolStripMenuItem_Click(object sender, EventArgs e)
+        private void arquivoSetupToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            string FileName = "";
+            FileName = Utils.Utils.PickFile("txt files (*.txt) | *.txt", "Selecionar arquivo de Setup");
+            if (!String.IsNullOrWhiteSpace(FileName))
+            {
+                Utils.Utils.CopyFile("Setup.txt", FileName, Application.StartupPath + "\\Configs\\");
+            }
+
         }
+
+        private void arquivoFilaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string FileName = "";
+            FileName = Utils.Utils.PickFile("txt files (*.txt) | *.txt", "Selecionar arquivo de Fila");
+            if (!String.IsNullOrWhiteSpace(FileName))
+            {
+                Utils.Utils.CopyFile("Queue.txt", FileName, Application.StartupPath + "\\Configs\\");
+            }
+        }
+
     }
 }
