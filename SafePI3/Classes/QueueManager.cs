@@ -126,10 +126,13 @@ namespace SafePI3.Classes
             CurrentTurn = 1;
             QueueFile = new StreamReader(Application.StartupPath + "//Configs//Queue.txt");
             form.UpdateTurn(CurrentTurn.ToString());
-            //ScheduleProcessTurnJob(speed);
             Application.DoEvents();
             speed = _speed;
+            arquivoAcabou = false;
+            CurrentLine = "";
+            PausedQueue = false;
             NextStep();
+            
         }
 
         public void NextStep()
@@ -168,8 +171,10 @@ namespace SafePI3.Classes
                     CurrentLine = QueueFile.ReadLine();
                     if (CurrentLine != null)
                         currentClientDTO = new ClientDTO(CurrentLine);
-                    else
+                    else { 
                         arquivoAcabou = true;
+                        QueueFile.Close();
+                    }
                 }
             }
 
@@ -190,7 +195,7 @@ namespace SafePI3.Classes
                         if (c.currentQueueSequence + 1 == c.QueueSequence.Count)
                         {
                             //Tirando Clientes do sistema
-                            c.TurnsInSystem = c.EntranceTurn - CurrentTurn;
+                            c.TurnsInSystem = CurrentTurn - c.EntranceTurn ;
                             FinishedClients.Add(c);
                             clientsToRemove.Add(c);
                         }
@@ -249,17 +254,24 @@ namespace SafePI3.Classes
                             .Where(a => a.QueueSequence.IndexOf(char.Parse(q.Name)) > -1)
                             .Average(a => a.QueueAllEntrances[a.QueueSequence.IndexOf(char.Parse(q.Name))]));
                 }
-                int IDMostWaitUser = FinishedClients.OrderByDescending(a => a.TurnsInSystem).First().ID;
+                Client MostWaitUser = FinishedClients.OrderByDescending(a => a.TurnsInSystem).First();
 
                 Dictionary<string, double> mediumPerCombination = new Dictionary<string, double>();
-                foreach (List<char> sequence in FinishedClients.Select(a => a.QueueSequence).Distinct())
+
+                foreach (string sequence in FinishedClients.Select(a => a.QueueSequence).Select(a => string.Join("|", a)).Distinct())
                 {
-                    mediumPerCombination.Add( string.Join("|", sequence) , FinishedClients
-                                                    .Where(a => a.QueueSequence == sequence)
+                    mediumPerCombination.Add(sequence , FinishedClients
+                                                    .Where(a => String.Join("|", a.QueueSequence) == sequence)
                                                     .Average(a => a.TurnsInSystem));
                 }
 
+
+                form.RunningQueue = false;
+                Results resultado = new Results();
+                resultado.LoadResults(mediumTimeSystem, mediumPerQueue, MostWaitUser, mediumPerCombination, CurrentTurn);
+                resultado.Show();
                 
+
 
             }
                 

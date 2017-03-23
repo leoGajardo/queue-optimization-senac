@@ -21,7 +21,7 @@ namespace SafePI3
     {
 
         QueueManager Manager;
-        bool RunningQueue = false;
+        public bool RunningQueue = false;
         public MainForm()
         {
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -110,14 +110,57 @@ namespace SafePI3
 
         private void Faster1Button_Click(object sender, EventArgs e)
         {
-            if (RunningQueue)
-                Manager.SetSpeed(Utils.TurnSpeed.Fast1);
+            if (!RunningQueue)
+            {
+                //Começa a simulação
+                if (Manager.LoadSetupFile())
+                {
+                    int x = 30;
+                    int y = 30;
+                    foreach (QueueUC item in Manager.Queues.Select(a => a.Value.QueueUserControl))
+                    {
+                        item.Location = new Point(x, y);
+                        this.Controls.Add(item);
+                        x += item.Width + 15;
+                    }
+                    RunningQueue = true;
+                    Manager.StartQueue(Utils.TurnSpeed.Fast1);
+
+                }
+                else
+                {
+                    Manager.SetSpeed(Utils.TurnSpeed.Fast1);
+                }
+
+            }
+                
         }
 
         private void Faster3Button_Click(object sender, EventArgs e)
         {
-            if (RunningQueue)
+            if (!RunningQueue)
+            {
+                //Começa a simulação
+                if (Manager.LoadSetupFile())
+                {
+                    int x = 30;
+                    int y = 30;
+                    foreach (QueueUC item in Manager.Queues.Select(a => a.Value.QueueUserControl))
+                    {
+                        item.Location = new Point(x, y);
+                        this.Controls.Add(item);
+                        x += item.Width + 15;
+                    }
+                    RunningQueue = true;
+                    Manager.StartQueue(Utils.TurnSpeed.Fast2);
+
+                }
+
+            }
+            else
+            {
                 Manager.SetSpeed(Utils.TurnSpeed.Fast2);
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -155,6 +198,7 @@ namespace SafePI3
         private void PauseButton_Click(object sender, EventArgs e)
         {
             Manager.PauseQueue();
+            RunningQueue = false;
             PlayButton.BackgroundImage = new Bitmap(Application.StartupPath + "\\Assets\\Images\\Restart.png");
         }
 
