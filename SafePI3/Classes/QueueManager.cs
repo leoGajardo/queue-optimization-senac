@@ -44,7 +44,7 @@ namespace SafePI3.Classes
             }
             Queues = new Dictionary<string, Queue>();
 
-            StreamReader file = new StreamReader(Application.StartupPath + "\\Configs\\Setup.txt");
+            StreamReader file = new StreamReader(Application.StartupPath + "\\Configs\\Setup.txt", Encoding.UTF8);
             string line = "";
             // primeira linha
             line = file.ReadLine();
