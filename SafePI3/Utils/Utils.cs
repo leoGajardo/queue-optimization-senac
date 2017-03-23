@@ -64,7 +64,7 @@ namespace SafePI3.Utils
             List<char> postos = new List<char>();
             line = file.ReadLine();
             postos.AddRange(line.Split(':')[1].ToCharArray());
-            if (postos.Count() < 5 || postos.Count() > 20)
+            if (postos.Count() < 5 || postos.Count() > 21)
             {
                 MessageBox.Show("Número de postos não atende as regras", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 file.Close();
