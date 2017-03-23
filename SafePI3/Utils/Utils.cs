@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.IO;
 using SafePI3.Classes;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
 
 namespace SafePI3.Utils
 {
@@ -53,7 +54,8 @@ namespace SafePI3.Utils
             // primeira linha
             line = file.ReadLine();
             int atendentesNumero = 0;
-            if (!Int32.TryParse(line, out atendentesNumero)) { 
+            if (!Int32.TryParse(line, out atendentesNumero))
+            {
                 MessageBox.Show("Problema na leitura do número de atendentes", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 file.Close();
                 return false;
@@ -62,7 +64,8 @@ namespace SafePI3.Utils
             List<char> postos = new List<char>();
             line = file.ReadLine();
             postos.AddRange(line.Split(':')[1].ToCharArray());
-            if(postos.Count() < 5 || postos.Count() > 20) { 
+            if (postos.Count() < 5 || postos.Count() > 20)
+            {
                 MessageBox.Show("Número de postos não atende as regras", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 file.Close();
                 return false;
@@ -83,7 +86,7 @@ namespace SafePI3.Utils
             //quarta linha
             line = file.ReadLine();
             int troca = 0;
-            if(!Int32.TryParse(line.Split(':')[1], out troca))
+            if (!Int32.TryParse(line.Split(':')[1], out troca))
             {
                 MessageBox.Show("Problema na leitura do valor da troca", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 file.Close();
@@ -96,14 +99,15 @@ namespace SafePI3.Utils
                 char posto;
                 int tempo = 0;
 
-                if(!Char.TryParse(line.Split(':')[0].Substring(0, 1), out posto) || !postos.Contains(posto))
+                if (!Char.TryParse(line.Split(':')[0].Substring(0, 1), out posto) || !postos.Contains(posto))
                 {
                     MessageBox.Show("Problema na leitura dos postos e seus tempos", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     file.Close();
                     return false;
                 }
 
-                if(!Int32.TryParse(line.Split(':')[0].Substring(1), out tempo)){
+                if (!Int32.TryParse(line.Split(':')[0].Substring(1), out tempo))
+                {
                     MessageBox.Show("Problema na leitura dos postos e seus tempos", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     file.Close();
                     return false;
@@ -128,7 +132,7 @@ namespace SafePI3.Utils
                 return false;
             }
             StreamReader file = new StreamReader(Application.StartupPath + "\\Configs\\Queue.txt");
-         
+
             string line = "";
             string pattern = "";
 
@@ -139,13 +143,15 @@ namespace SafePI3.Utils
             List<char> postos = new List<char>();
             postos.AddRange(line.Split(':')[1].ToCharArray().Distinct().Skip(1));
             setup.Close();
-            
-            
+
+
             string patternEnd = @"+C[\d]+A[" + string.Join("{1}]?[", postos) + @"{1}]?$";
             int UNumber = 1;
-            while ((line = file.ReadLine()) != null) { 
+            while ((line = file.ReadLine()) != null)
+            {
                 pattern = "^U" + UNumber + patternEnd;
-                if (!Regex.Match(line.Trim(), pattern).Success) {
+                if (!Regex.Match(line.Trim(), pattern).Success)
+                {
                     MessageBox.Show("Existe alguma inconsistencia no arquivo de fila na linha: " + UNumber, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     file.Close();
                     return false;
@@ -155,6 +161,20 @@ namespace SafePI3.Utils
             file.Close();
             return true;
         }
+
+        public static int RemoveAll<T>(
+                        this ObservableCollection<T> coll, Func<T, bool> condition)
+        {
+            var itemsToRemove = coll.Where(condition).ToList();
+
+            foreach (var itemToRemove in itemsToRemove)
+            {
+                coll.Remove(itemToRemove);
+            }
+
+            return itemsToRemove.Count;
+        }
+
     }
 
 }

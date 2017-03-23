@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.QueueName = new System.Windows.Forms.Label();
+            this.ProgressNumber = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // QueueName
@@ -41,14 +42,25 @@
             this.QueueName.Text = "label1";
             this.QueueName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // ProgressNumber
+            // 
+            this.ProgressNumber.AutoSize = true;
+            this.ProgressNumber.Location = new System.Drawing.Point(54, 319);
+            this.ProgressNumber.Name = "ProgressNumber";
+            this.ProgressNumber.Size = new System.Drawing.Size(35, 13);
+            this.ProgressNumber.TabIndex = 1;
+            this.ProgressNumber.Text = "label1";
+            this.ProgressNumber.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // QueueUC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Controls.Add(this.ProgressNumber);
             this.Controls.Add(this.QueueName);
             this.Name = "QueueUC";
-            this.Size = new System.Drawing.Size(137, 315);
+            this.Size = new System.Drawing.Size(137, 350);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -57,5 +69,6 @@
         #endregion
 
         private System.Windows.Forms.Label QueueName;
+        private System.Windows.Forms.Label ProgressNumber;
     }
 }

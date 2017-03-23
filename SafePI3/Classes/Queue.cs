@@ -2,6 +2,9 @@
 using SafePI3.UserControls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +13,11 @@ namespace SafePI3.Classes
 {
     public class Queue : IQueue, IDisposable
     {
-        private List<Client> _Clients;
-        private int _TimePerClient;
-        public List<Client> Clients
+        private ObservableCollection<Client> _Clients;
+        public int TimePerClient { get; private set; }
+        
+
+        public ObservableCollection<Client> Clients
         {
            get
             {
@@ -27,6 +32,11 @@ namespace SafePI3.Classes
             }
         }
 
+        private void Clients_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            UpdateQueueUserControl();
+        }
+        
         private string _Name;
         public string Name
         {
@@ -108,6 +118,9 @@ namespace SafePI3.Classes
         }
 
         private QueueUC _QueueUserControl;
+
+        
+
         public QueueUC QueueUserControl
         {
             get
@@ -124,16 +137,19 @@ namespace SafePI3.Classes
             }
         }
 
-        public Queue(string label , string name , int operatorsQuantity , int queuesQuantity , int serviceDesksQuantity , List<Client> clients, int timePerClient)
+        public Queue(string label , string name , int operatorsQuantity , int queuesQuantity , int serviceDesksQuantity , int timePerClient)
         {
             _Label = label;
             _Name = name;
             _OperatorsQuantity = operatorsQuantity;
             _QueuesQuantity = queuesQuantity;
             _ServiceDesksQuantity = serviceDesksQuantity;
-            _Clients = clients;
-            _TimePerClient = timePerClient;
+            _Clients = new ObservableCollection<Client>();
+            _Clients.CollectionChanged += Clients_CollectionChanged;
+            TimePerClient = timePerClient;
         }
+
+        
 
         public void Dispose()
         {

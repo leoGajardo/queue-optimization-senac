@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SafePI3.Classes;
 using SafePI3.UserControls;
+using System.Collections.ObjectModel;
 
 namespace SafePI3.Interfaces
 {
@@ -20,7 +21,7 @@ namespace SafePI3.Interfaces
 
         int OperatorsQuantity { get; set; }
 
-        List<Client> Clients { get; set; }
+        ObservableCollection<Client> Clients { get; set; }
         
         QueueUC QueueUserControl { get; set; }
     }

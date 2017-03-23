@@ -28,7 +28,7 @@ namespace SafePI3.UserControls
             CurrentQueue = queue;
             this.Width = (CurrentQueue.ServiceDesksQuantity * _picWidth) + 40;
 
-            QueueName.Text = CurrentQueue.Name;
+            QueueName.Text = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(CurrentQueue.Label)) ?? CurrentQueue.Name;
             QueueName.Left = (this.Width - QueueName.Width) / 2;
 
             InitializeServiceDesks();
@@ -69,12 +69,23 @@ namespace SafePI3.UserControls
             ProgressBar.Width = 30;
             ProgressBar.Top = 120;
             ProgressBar.Left = (((CurrentQueue.ServiceDesksQuantity * _picWidth) + 40) / 2) - (ProgressBar.Width / 2);
+            ProgressBar.Maximum = 20;
+            ProgressBar.Step = 1;
+            ProgressBar.Value = 0;
+
+            
+                        
+            ProgressNumber.Top = 330;
+            ProgressNumber.Left = (((CurrentQueue.ServiceDesksQuantity * _picWidth) + 40) / 2) - (ProgressBar.Width / 2);
+            ProgressNumber.Text = "0";
+
             UpdateProgressBar();
             this.Controls.Add(ProgressBar);
         }
         private void UpdateProgressBar()
         {
-            
+            ProgressBar.Value = CurrentQueue.Clients.Count();
+            ProgressNumber.Text = CurrentQueue.Clients.Count().ToString();
         }
     }
 }

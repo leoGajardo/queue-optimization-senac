@@ -20,31 +20,18 @@ namespace SafePI3
     public partial class MainForm : Form
     {
 
-        QueueManager Manager = new QueueManager();
+        QueueManager Manager;
         bool RunningQueue = false;
         public MainForm()
         {
             this.StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
-
-            //Queue _queue = new Queue("Teste", "A", 3, 1, 3, new List<Client>());
-            //_queue.QueueUserControl.Location = new Point(30, 30);
-            //this.Controls.Add(_queue.QueueUserControl);
-            //Queues.Add(_queue.Name,_queue);
- 
-           
         }
-
-
+        
         private void creditosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Credits CreditsForm = new Credits();
             CreditsForm.Show();
-        }
-
-        private void configuracoesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-           
         }
 
         private void arquivoSetupToolStripMenuItem_Click(object sender, EventArgs e)
@@ -79,15 +66,42 @@ namespace SafePI3
         {
             if (RunningQueue)
             {
-                RunningQueue = false;
+                //Reinicia a simulação
+                RunningQueue = true;
                 PlayButton.BackgroundImage = new Bitmap(Application.StartupPath + "\\Assets\\Images\\Play.png");
+                if (Manager.LoadSetupFile())
+                {
+                    int x = 30;
+                    int y = 30;
+                    foreach (QueueUC item in Manager.Queues.Select(a => a.Value.QueueUserControl))
+                    {
+                        item.Location = new Point(x, y);
+                        this.Controls.Add(item);
+                        x += item.Width + 15;
+                    }
+
+                    RunningQueue = true;
+                    Manager.StartQueue(Utils.TurnSpeed.Normal);
+                    
+                }
             }
             else
             {
-                Manager.LoadSetupFile();
-                Manager.StartQueue();
-                RunningQueue = true;
-                PlayButton.BackgroundImage = new Bitmap(Application.StartupPath + "\\Assets\\Images\\Stop.png");
+                //Começa a simulação
+                if (Manager.LoadSetupFile())
+                {
+                    int x = 30;
+                    int y = 30;
+                    foreach (QueueUC item in Manager.Queues.Select(a => a.Value.QueueUserControl))
+                    {
+                        item.Location = new Point(x, y);
+                        this.Controls.Add(item);
+                        x += item.Width + 15;
+                    }
+                    RunningQueue = true;
+                    Manager.StartQueue(Utils.TurnSpeed.Normal);
+                    
+                }
                 
             }
             
@@ -96,26 +110,57 @@ namespace SafePI3
 
         private void Faster1Button_Click(object sender, EventArgs e)
         {
-
+            if (RunningQueue)
+                Manager.SetSpeed(Utils.TurnSpeed.Fast1);
         }
 
         private void Faster3Button_Click(object sender, EventArgs e)
         {
-
+            if (RunningQueue)
+                Manager.SetSpeed(Utils.TurnSpeed.Fast2);
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (Directory.Exists(Application.StartupPath + "//Configs"))
-                Directory.Delete(Application.StartupPath + "//Configs", true);
+            try
+            {
+                Manager.Dispose();
+                if (Directory.Exists(Application.StartupPath + "//Configs"))
+                    Directory.Delete(Application.StartupPath + "//Configs", true);
+            }
+            catch (Exception)
+            {
+
+            }
+         
             base.OnClosing(e);
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            if(Directory.Exists(Application.StartupPath + "//Configs"))
-                Directory.Delete(Application.StartupPath + "//Configs", true);
+            try
+            {
+                if (Directory.Exists(Application.StartupPath + "//Configs"))
+                    Directory.Delete(Application.StartupPath + "//Configs", true);
+                Manager = new QueueManager(this);
+            }
+            catch (Exception)
+            {
+
+            }
+
             base.OnLoad(e);
+        }
+
+        private void PauseButton_Click(object sender, EventArgs e)
+        {
+            Manager.PauseQueue();
+            PlayButton.BackgroundImage = new Bitmap(Application.StartupPath + "\\Assets\\Images\\Restart.png");
+        }
+
+        public void UpdateTurn(string _currentTurn)
+        {
+            CurrentTurn.Text = _currentTurn;
         }
     }
 }

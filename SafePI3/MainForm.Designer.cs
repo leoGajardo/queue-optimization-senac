@@ -40,7 +40,8 @@
             this.Faster1Button = new System.Windows.Forms.Button();
             this.Faster3Button = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.CurrentTurn = new System.Windows.Forms.Label();
+            this.PauseButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -114,7 +115,7 @@
             // 
             this.Faster1Button.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Faster1Button.BackgroundImage")));
             this.Faster1Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Faster1Button.Location = new System.Drawing.Point(104, 433);
+            this.Faster1Button.Location = new System.Drawing.Point(196, 433);
             this.Faster1Button.Name = "Faster1Button";
             this.Faster1Button.Size = new System.Drawing.Size(86, 86);
             this.Faster1Button.TabIndex = 2;
@@ -126,7 +127,7 @@
             this.Faster3Button.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Faster3Button.BackgroundImage")));
             this.Faster3Button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Faster3Button.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Faster3Button.Location = new System.Drawing.Point(196, 433);
+            this.Faster3Button.Location = new System.Drawing.Point(288, 433);
             this.Faster3Button.Name = "Faster3Button";
             this.Faster3Button.Size = new System.Drawing.Size(86, 86);
             this.Faster3Button.TabIndex = 3;
@@ -142,21 +143,33 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "Turnos:";
             // 
-            // label2
+            // CurrentTurn
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 417);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(13, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "0";
+            this.CurrentTurn.AutoSize = true;
+            this.CurrentTurn.Location = new System.Drawing.Point(9, 417);
+            this.CurrentTurn.Name = "CurrentTurn";
+            this.CurrentTurn.Size = new System.Drawing.Size(13, 13);
+            this.CurrentTurn.TabIndex = 6;
+            this.CurrentTurn.Text = "0";
+            // 
+            // PauseButton
+            // 
+            this.PauseButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("PauseButton.BackgroundImage")));
+            this.PauseButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.PauseButton.Location = new System.Drawing.Point(104, 433);
+            this.PauseButton.Name = "PauseButton";
+            this.PauseButton.Size = new System.Drawing.Size(86, 86);
+            this.PauseButton.TabIndex = 7;
+            this.PauseButton.UseVisualStyleBackColor = true;
+            this.PauseButton.Click += new System.EventHandler(this.PauseButton_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(986, 523);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.PauseButton);
+            this.Controls.Add(this.CurrentTurn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Faster3Button);
             this.Controls.Add(this.Faster1Button);
@@ -185,7 +198,8 @@
         private System.Windows.Forms.Button Faster1Button;
         private System.Windows.Forms.Button Faster3Button;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label CurrentTurn;
+        private System.Windows.Forms.Button PauseButton;
     }
 }
 
