@@ -223,7 +223,7 @@ namespace SafePI3.Classes
 
             //    foreach (Change item in ArrivingChanges)
             //    {
-            //        Queues[item.FromQueue].OperatorsQuantity += 1;
+            //       Queues[item.FromQueue].OperatorsQuantity += 1;
             //    }
 
             //    ListChanges.RemoveAll(c => ArrivingChanges.Contains(c));
@@ -239,6 +239,8 @@ namespace SafePI3.Classes
                 IList<Client> allClientsInRound = optimizingQ.SelectMany(q => q.Value.Clients).ToList();
 
                 
+
+
 
             }
 

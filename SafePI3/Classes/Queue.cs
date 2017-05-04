@@ -62,9 +62,12 @@ namespace SafePI3.Classes
             }
             set
             {
-                if (value != _OperatorsQuantity) { 
-                    _OperatorsQuantity = value;
-                    UpdateQueueUserControl();
+                if (value != _OperatorsQuantity) {
+                    if (value < ServiceDesksQuantity)
+                    {
+                        _OperatorsQuantity = value;
+                        UpdateQueueUserControl();
+                    }
                 }
             }
         }
