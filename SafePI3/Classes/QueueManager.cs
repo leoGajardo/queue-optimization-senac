@@ -19,6 +19,8 @@ namespace SafePI3.Classes
 
         private MainForm form;
 
+        private List<Change> ListChanges;
+
         private StreamReader QueueFile;
         private string CurrentLine;
         private bool arquivoAcabou;
@@ -33,6 +35,7 @@ namespace SafePI3.Classes
             Queues = new Dictionary<string, Queue>();
 
             form = _form;
+            ListChanges = new List<Change>();
         }
 
         public bool LoadSetupFile()
@@ -211,6 +214,45 @@ namespace SafePI3.Classes
                 }
                 q.Clients.RemoveAll(a => clientsToRemove.Contains(a));
             }
+
+            // Chegada de Atendente
+
+            //if (ListChanges.Count(c => c.RoundArrival == CurrentTurn) > 0) {
+            //    IList<Change> ArrivingChanges = new List<Change>();
+            //    ArrivingChanges = ListChanges.Where(c => c.RoundArrival == CurrentTurn).ToList();
+
+            //    foreach (Change item in ArrivingChanges)
+            //    {
+            //        Queues[item.FromQueue].OperatorsQuantity += 1;
+            //    }
+
+            //    ListChanges.RemoveAll(c => ArrivingChanges.Contains(c));
+            //}
+
+
+            // Otimização
+
+            if (ChangeFee > 0 && Queues.Where(q => q.Key != "A").Select(q => q.Value.Clients).Count() > 15)
+            {
+                var optimizingQ = Queues.Where(q2 => q2.Key != "A");
+                
+                IList<Client> allClientsInRound = optimizingQ.SelectMany(q => q.Value.Clients).ToList();
+
+                
+
+            }
+
+            // Display Changes in Panel
+            ListChanges.Add(new Change("K", "Z", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
+            if (ListChanges.Count() > 0)
+            {
+                ListChanges.RemoveAll(q => q==q);
+                ListChanges.Add(new Change("A", "B", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
+                ListChanges.Add(new Change("C", "D", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
+                form.UpdateChangesPanel(ListChanges);
+            }
+            
+
 
             //Colocando novos Clientes em atendimento
             foreach (Queue q in Queues.Select(a => a.Value))

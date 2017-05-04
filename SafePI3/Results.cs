@@ -51,12 +51,15 @@ namespace SafePI3
             }
 
             apx = 13;
-            apy = 140;
+            //apy = 140;
+            apy = 13;
             
             bpx = 118;
-            bpy = 140;
+            //bpy = 140;
+            bpy = 13;
 
-            this.Height += mediumPerCombination.Count * 45;
+
+            this.Height += mediumPerQueue.Count * 45;
 
 
             foreach (var item in mediumPerCombination)
@@ -71,9 +74,9 @@ namespace SafePI3
                 b.Text = item.Value.ToString();
                 b.Location = new Point(bpx, bpy);
 
-                this.Controls.Add(a);
-                this.Controls.Add(b);
-
+                this.CombinationsPanel.Controls.Add(a);
+                this.CombinationsPanel.Controls.Add(b);
+                
                 apy += 35;
                 bpy += 35;
             }

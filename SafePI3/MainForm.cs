@@ -25,7 +25,7 @@ namespace SafePI3
             this.StartPosition = FormStartPosition.CenterScreen;
             InitializeComponent();
         }
-        
+
         private void creditosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Credits CreditsForm = new Credits();
@@ -81,7 +81,7 @@ namespace SafePI3
                     RunningQueue = true;
                     PausedQueue = false;
                     Manager.StartQueue(Utils.TurnSpeed.Normal);
-                    
+
                 }
             }
             if (RunningQueue && !PausedQueue)
@@ -111,8 +111,8 @@ namespace SafePI3
                 }
 
             }
-            
-            
+
+
         }
 
         private void Faster1Button_Click(object sender, EventArgs e)
@@ -131,7 +131,7 @@ namespace SafePI3
                         item.Location = new Point(x, y);
                         this.Controls.Add(item);
                         x += item.Width + 15;
-                        
+
                     }
                     this.Width = Manager.Queues.Select(a => a.Value.ServiceDesksQuantity).Sum(a => a) * 50 + Manager.Queues.Count * 40 + 20;
                     RunningQueue = true;
@@ -145,8 +145,9 @@ namespace SafePI3
                 }
 
             }
-                
+
         }
+               
 
         private void Faster3Button_Click(object sender, EventArgs e)
         {
@@ -165,7 +166,7 @@ namespace SafePI3
                         this.Controls.Add(item);
                         x += item.Width + 15;
                     }
-                    this.Width = Manager.Queues.Select(a => a.Value.ServiceDesksQuantity).Sum(a => a) * 52 + Manager.Queues.Count * 53 + 30 ;
+                    this.Width = Manager.Queues.Select(a => a.Value.ServiceDesksQuantity).Sum(a => a) * 52 + Manager.Queues.Count * 53 + 30;
                     RunningQueue = true;
                     PausedQueue = false;
                     Manager.StartQueue(Utils.TurnSpeed.Fast2);
@@ -189,7 +190,7 @@ namespace SafePI3
             {
 
             }
-         
+
             base.OnClosing(e);
         }
 
@@ -207,6 +208,26 @@ namespace SafePI3
             }
 
             base.OnLoad(e);
+        }
+
+        public void UpdateChangesPanel(List<Change> ListChanges)
+        {
+            int ax = 10;
+            int ay = 10;
+            ChangesPanel.Controls.Clear();
+            foreach (Change item in ListChanges)
+            {
+                
+
+                Label C1 = new Label();
+
+                C1.Text = "Atendente saindo de " + item.FromQueue + " chegando em " + item.ToQueue + " no round " + item.RoundArrival;
+                C1.Location = new Point(ax, ay);
+                C1.AutoSize = true;
+
+                ChangesPanel.Controls.Add(C1);
+                ay += 25;
+            }
         }
 
         public void PauseButton_Click(object sender, EventArgs e)
@@ -231,7 +252,12 @@ namespace SafePI3
                     this.Controls.Remove(q.Value.QueueUserControl);
                 }
             }
-            
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

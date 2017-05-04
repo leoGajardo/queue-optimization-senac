@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Changes.cs" />
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\Queue.cs" />
     <Compile Include="Classes\QueueManager.cs" />

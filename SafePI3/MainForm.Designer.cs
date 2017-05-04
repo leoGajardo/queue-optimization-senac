@@ -42,6 +42,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.CurrentTurn = new System.Windows.Forms.Label();
             this.PauseButton = new System.Windows.Forms.Button();
+            this.ChangesPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -163,11 +165,32 @@
             this.PauseButton.UseVisualStyleBackColor = true;
             this.PauseButton.Click += new System.EventHandler(this.PauseButton_Click);
             // 
+            // ChangesPanel
+            // 
+            this.ChangesPanel.AutoScroll = true;
+            this.ChangesPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.ChangesPanel.Location = new System.Drawing.Point(437, 417);
+            this.ChangesPanel.Name = "ChangesPanel";
+            this.ChangesPanel.Size = new System.Drawing.Size(537, 94);
+            this.ChangesPanel.TabIndex = 9;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(434, 401);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(76, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Lista de trocas";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(986, 523);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.ChangesPanel);
             this.Controls.Add(this.PauseButton);
             this.Controls.Add(this.CurrentTurn);
             this.Controls.Add(this.label1);
@@ -200,6 +223,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label CurrentTurn;
         private System.Windows.Forms.Button PauseButton;
+        private System.Windows.Forms.FlowLayoutPanel ChangesPanel;
+        private System.Windows.Forms.Label label2;
     }
 }
 
