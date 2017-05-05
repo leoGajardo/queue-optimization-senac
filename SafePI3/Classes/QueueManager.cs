@@ -238,19 +238,22 @@ namespace SafePI3.Classes
                 
                 IList<Client> allClientsInRound = optimizingQ.SelectMany(q => q.Value.Clients).ToList();
 
-                
-
-
+                IList<Queue> AvaiableOperators = Queues
+                                                    .Select(q => q.Value)
+                                                    .Where(q => q.OperatorsQuantity < q.Clients.Count(c => c.atendimento))
+                                                    .ToList();
 
             }
 
             // Display Changes in Panel
-            ListChanges.Add(new Change("K", "Z", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
+            
             if (ListChanges.Count() > 0)
             {
-                ListChanges.RemoveAll(q => q==q);
-                ListChanges.Add(new Change("A", "B", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
-                ListChanges.Add(new Change("C", "D", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
+                //Teste
+                //ListChanges.RemoveAll(q => q==q);
+                //ListChanges.Add(new Change("A", "B", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
+                //ListChanges.Add(new Change("C", "D", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
+
                 form.UpdateChangesPanel(ListChanges);
             }
             
