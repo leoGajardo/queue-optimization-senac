@@ -234,25 +234,39 @@ namespace SafePI3.Classes
 
             if (ChangeFee > 0 && Queues.Where(q => q.Key != "A").Select(q => q.Value.Clients).Count() > 15)
             {
-                var optimizingQ = Queues.Where(q2 => q2.Key != "A");
-                
-                IList<Client> allClientsInRound = optimizingQ.SelectMany(q => q.Value.Clients).ToList();
+                //Checar qual fila pode disponibilizar um atendente
 
                 IList<Queue> AvaiableOperators = Queues
                                                     .Select(q => q.Value)
                                                     .Where(q => q.OperatorsQuantity < q.Clients.Count(c => c.atendimento))
                                                     .ToList();
 
+                if (AvaiableOperators.Count() > 0)
+                {
+                    // Pegar todos clientes disponiveis para gerar as estatisticas
+                    
+                    var optimizingQ = Queues.Where(q2 => q2.Key != "A");
+                    IList<Client> allClientsInRound = optimizingQ.SelectMany(q => q.Value.Clients).ToList();
+
+                    //Checar os cenários e os indices de cada fila
+
+
+
+                    //Checar qual fila precisa de um atendente
+
+
+
+                }
             }
 
             // Display Changes in Panel
-            
+
             if (ListChanges.Count() > 0)
             {
                 //Teste
-                //ListChanges.RemoveAll(q => q==q);
-                //ListChanges.Add(new Change("A", "B", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
-                //ListChanges.Add(new Change("C", "D", (int)(new Random().NextDouble()), (int)(new Random().NextDouble())));
+                //ListChanges.Clear();
+                //ListChanges.Add(new Change("A", "B", (int)(new Random().NextDouble()), (int)(new Random().NextDouble() * 1000)));
+                //ListChanges.Add(new Change("C", "D", (int)(new Random().NextDouble()), (int)(new Random().NextDouble() * 1000)));
 
                 form.UpdateChangesPanel(ListChanges);
             }
