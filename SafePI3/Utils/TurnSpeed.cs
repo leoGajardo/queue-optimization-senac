@@ -10,6 +10,7 @@ namespace SafePI3.Utils
     {
         Normal =  1,
         Fast1 = 2,
-        Fast2 = 4
+        Fast2 = 4,
+        Fast3 = 10
     }
 }

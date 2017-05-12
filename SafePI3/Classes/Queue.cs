@@ -15,7 +15,8 @@ namespace SafePI3.Classes
     {
         private ObservableCollection<Client> _Clients;
         public int TimePerClient { get; private set; }
-        
+
+        public List<Client> AllClients { get; set; }
 
         public ObservableCollection<Client> Clients
         {
@@ -63,7 +64,7 @@ namespace SafePI3.Classes
             set
             {
                 if (value != _OperatorsQuantity) {
-                    if (value < ServiceDesksQuantity)
+                    if (!(value > ServiceDesksQuantity))
                     {
                         _OperatorsQuantity = value;
                         UpdateQueueUserControl();
@@ -150,6 +151,7 @@ namespace SafePI3.Classes
             _Clients = new ObservableCollection<Client>();
             _Clients.CollectionChanged += Clients_CollectionChanged;
             TimePerClient = timePerClient;
+            AllClients = new List<Client>();
         }
 
         

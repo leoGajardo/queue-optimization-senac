@@ -69,7 +69,7 @@ namespace SafePI3.UserControls
             ProgressBar.Width = 30;
             ProgressBar.Top = 120;
             ProgressBar.Left = (((CurrentQueue.ServiceDesksQuantity * _picWidth) + 40) / 2) - (ProgressBar.Width / 2);
-            ProgressBar.Maximum = 50;
+            ProgressBar.Maximum = 200;
             ProgressBar.Step = 1;
             ProgressBar.Value = 0;
 
