@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,10 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Changes.cs" />
+    <Compile Include="Classes\Change.cs" />
     <Compile Include="Classes\Client.cs" />
     <Compile Include="Classes\Queue.cs" />
     <Compile Include="Classes\QueueManager.cs" />
+    <Compile Include="Classes\StatisticsOfQueue.cs" />
     <Compile Include="ClientDTO.cs" />
     <Compile Include="Credits.cs">
       <SubType>Form</SubType>
