@@ -198,9 +198,9 @@ namespace SafePI3
         {
             try
             {
+                Manager = new QueueManager(this);
                 if (Directory.Exists(Application.StartupPath + "//Configs"))
                     Directory.Delete(Application.StartupPath + "//Configs", true);
-                Manager = new QueueManager(this);
             }
             catch (Exception)
             {

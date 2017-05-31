@@ -28,17 +28,31 @@ namespace SafePI3.Classes
 
         public void UpdateStatistics()
         {
-            double alpha = (AllClients.Count() == 0 ? 1 : AllClients.Count() ) / 50;
-            double mi = 50 / QueueCost;
+            double alpha = AllClients.Count() / QueueCost;
+            double mi = 1;
 
+            ProbabilityOfIdle = 0;
+
+            if (Operators == 0)
+            {
+                ProbabilityOfIdle = 0;
+                return;
+            }
+            if (AllClients.Count() == 0)
+            {
+                ProbabilityOfIdle = double.MaxValue;
+                return;
+            }
 
             for (int n = 0; n < Operators; n++)
             {
-                ProbabilityOfIdle += (Math.Pow((alpha / mi), n) / SpecialFunctions.Factorial(n))
-                    + ((Math.Pow((alpha / mi), Operators)) / (SpecialFunctions.Factorial(Operators) * (1 - (alpha / (Operators * mi)))));
+                ProbabilityOfIdle += Math.Pow((Math.Pow((alpha / mi), n) / SpecialFunctions.Factorial(n))
+                    + ((Math.Pow((alpha / mi), Operators)) / (SpecialFunctions.Factorial(Operators) * (1 - (alpha / (Operators * mi))))),-1);
             }
 
             ProbabilityOfIdle *= 100;
+            if (double.IsInfinity(ProbabilityOfIdle))
+                ProbabilityOfIdle = double.MaxValue;
         }
     }
 }

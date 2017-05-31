@@ -69,6 +69,13 @@ namespace SafePI3.Classes
                         _OperatorsQuantity = value;
                         UpdateQueueUserControl();
                     }
+                    else
+                    {
+                        if (value > ServiceDesksQuantity)
+                        {
+                            throw new InvalidOperationException();
+                        }
+                    }
                 }
             }
         }

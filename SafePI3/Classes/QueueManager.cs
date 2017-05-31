@@ -44,10 +44,16 @@ namespace SafePI3.Classes
             LogListChanges = new List<Change>();
             statictics = new Dictionary<string, StatisticsOfQueue>();
 
-            if (File.Exists(Application.StartupPath + "\\Configs\\LogChanges.txt"))
+            if (File.Exists(Application.StartupPath + "\\LogChanges.txt"))
             {
-                File.Delete(Application.StartupPath + "\\Configs\\LogChanges.txt");
-                File.CreateText(Application.StartupPath + "\\Configs\\LogChanges.txt").Close();
+                File.Delete(Application.StartupPath + "\\LogChanges.txt");
+                File.CreateText(Application.StartupPath + "\\LogChanges.txt").Close();
+            }
+
+            if (File.Exists(Application.StartupPath + "\\LogIddleRatings.txt"))
+            {
+                File.Delete(Application.StartupPath + "\\LogIddleRatings.txt");
+                File.CreateText(Application.StartupPath + "\\LogIddleRatings.txt").Close();
             }
                 
         }
@@ -265,7 +271,7 @@ namespace SafePI3.Classes
 
             // Otimização
 
-            if (ChangeFee > 0 && Queues.Sum(q => q.Value.Clients.Count()) > 20)
+            if (ChangeFee > 0 && Queues.Sum(q => q.Value.AllClients.Count()) > 20)
             {
                 //Checar qual fila pode disponibilizar um atendente
 
@@ -292,26 +298,52 @@ namespace SafePI3.Classes
 		                sq.Value.Operators = Queues[sq.Key].OperatorsQuantity;
                         sq.Value.AllClients = Queues[sq.Key].AllClients.Where(
                                     c =>
-                                        CurrentTurn - c.QueueAllEntrances[c.QueueSequence.IndexOf(sq.Key.ToCharArray()[0])] < 50)
+                                        CurrentTurn - c.QueueAllEntrances[c.QueueSequence.IndexOf(sq.Key.ToCharArray()[0])] < 30)
                                         .ToList();
+                        sq.Value.AllClients.AddRange(Queues[sq.Key].Clients);
+                        sq.Value.AllClients = sq.Value.AllClients.Distinct().ToList();
                         sq.Value.CurrentTurn = CurrentTurn;
                         sq.Value.QueueCost = Queues[sq.Key].TimePerClient;
                         
                         sq.Value.UpdateStatistics();
+
+                        StreamWriter logger = File.AppendText(Application.StartupPath + "\\Configs\\LogIddleRatings.txt");
+                        logger.WriteLine(
+                                    "Queue :" + sq.Key +
+                                    "   IddleRating " + sq.Value.ProbabilityOfIdle +
+                                    "   ClientsNumber " + sq.Value.AllClients.Count +
+                                    "   CurrentTurn " + sq.Value.CurrentTurn);
+
+                        logger.Close();
 	                }
                     
+                    var bla = statictics.Where(s => (AvaiableOperators.Count(ao => ao.Name == s.Key) > 0 || (s.Key == "A" && Queues["A"].Clients.Count() == 0 && arquivoAcabou) && s.Value.Operators > 1 )).OrderByDescending(s => s.Value.ProbabilityOfIdle).ThenByDescending(s => s.Value.Operators);
+
                     //Checar os cenários e os indices de cada fila com operador disponivel para mudança
-                    foreach (var sq in statictics.Where(s => (AvaiableOperators.Count(ao => ao.Name == s.Key) > 0 || (s.Key == "A" && Queues["A"].Clients.Count() == 0 && arquivoAcabou) && s.Value.Operators > 1 )).OrderByDescending(s => s.Value.ProbabilityOfIdle))
+                    foreach (var sq in bla.Where(q => q.Value.ProbabilityOfIdle > 0))
                     {
                         if (sq.Value.Operators > 0)
                         {
 
                             //Checar qual fila precisa de um atendente
                             var s1 = statictics.Where(
-                                            s => (s.Value.ProbabilityOfIdle / sq.Value.ProbabilityOfIdle > 0.15 || (s.Value.Operators == 0 && s.Key != "A")));
-                            s1 = s1.Where(s => s.Value.ProbabilityOfIdle == statictics.Min(s2 => s2.Value.ProbabilityOfIdle));
+                                            s => (s.Value.ProbabilityOfIdle <= 0) || (s.Value.ProbabilityOfIdle / sq.Value.ProbabilityOfIdle <= 0.15) || (sq.Key == "A" && Queues["A"].Clients.Count() == 0 && arquivoAcabou));
+
+                            s1 = s1.Where(s => ChangeFee / (Queues[s.Key].Clients.Count * s.Value.QueueCost) < 0.35 || (Queues[s.Key].Clients.Count > 0 && s.Value.Operators == 0));
+                            //s1 = s1.Where(s => (Queues[s.Key].Clients.Count * s.Value.QueueCost) / s.Value.Operators > (Queues[sq.Key].Clients.Count * sq.Value.QueueCost) / sq.Value.Operators);
+
+                            //|| (s.Value.Operators == 0 && s.Key != "A" && !arquivoAcabou)
+
                             s1 = s1.Where(s => Queues[s.Key].OperatorsQuantity + ListChanges.Count(lc => lc.ToQueue == s.Key) < Queues[s.Key].ServiceDesksQuantity);
-                            s1 = s1.Where(s => ( arquivoAcabou && s.Key == "A" ? 0 : 1 ) == 1);
+                            s1 = s1.Where(s => ((arquivoAcabou && Queues["A"].Clients.Count == 0 && s.Key == "A") ? 0 : 1) == 1);
+                            if (s1.Count() > 0) 
+                            {
+                                var min = s1.Min(s => s.Value.ProbabilityOfIdle);
+                                s1 = s1.Where(s => s.Value.ProbabilityOfIdle == min);
+                                s1 = s1.Where(s => s.Key != sq.Key);
+                            }
+                            
+                            
                             
 
                             if (s1.Count() > 0)
@@ -328,7 +360,8 @@ namespace SafePI3.Classes
                                             "Atendente saindo de " + c.FromQueue +
                                             " no round " + c.RoundDeparture +
                                             " e chegando em " + c.ToQueue +
-                                            " no round " + c.RoundArrival));
+                                            " no round " + c.RoundArrival +
+                                            " que tem " + Queues[c.ToQueue].OperatorsQuantity + " operadores"));
 
                                 f.Close();
                             }
