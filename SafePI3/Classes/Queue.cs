@@ -54,6 +54,8 @@ namespace SafePI3.Classes
             }
         }
 
+        public int OperatorsJustArrived { get; set; }
+
         private int _OperatorsQuantity;
         public int OperatorsQuantity
         {

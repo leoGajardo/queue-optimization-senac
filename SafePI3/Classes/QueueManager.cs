@@ -23,7 +23,7 @@ namespace SafePI3.Classes
         private List<Change> LogListChanges;
 
         private Dictionary<string, StatisticsOfQueue> statictics;
-        
+
         private StreamReader QueueFile;
         private string CurrentLine;
         private bool arquivoAcabou;
@@ -55,7 +55,7 @@ namespace SafePI3.Classes
                 File.Delete(Application.StartupPath + "\\LogIddleRatings.txt");
                 File.CreateText(Application.StartupPath + "\\LogIddleRatings.txt").Close();
             }
-                
+
         }
 
         public bool LoadSetupFile()
@@ -155,7 +155,7 @@ namespace SafePI3.Classes
             CurrentLine = "";
             PausedQueue = false;
             GeneralTimer.Tick += new EventHandler(NextStep);
-            GeneralTimer.Interval = 1000/(int)speed;
+            GeneralTimer.Interval = 1000 / (int)speed;
             GeneralTimer.Start();
 
         }
@@ -164,7 +164,7 @@ namespace SafePI3.Classes
         {
 
             DateTime tempo = DateTime.Now;
-            
+
             tempo = tempo.AddMilliseconds(1000 / (int)speed);
             ClientDTO currentClientDTO;
 
@@ -207,7 +207,8 @@ namespace SafePI3.Classes
                     CurrentLine = QueueFile.ReadLine();
                     if (CurrentLine != null)
                         currentClientDTO = new ClientDTO(CurrentLine);
-                    else { 
+                    else
+                    {
                         arquivoAcabou = true;
                         QueueFile.Close();
                     }
@@ -219,8 +220,9 @@ namespace SafePI3.Classes
             foreach (Queue q in Queues.Where(q => q.Value.Clients.Count() > 0).Select(a => a.Value))
             {
                 List<Client> clientsToRemove = new List<Client>();
-                foreach (Client c in q.Clients.Where(a => a.atendimento)){
-                    if(CurrentTurn - c.beginAtendimento  == q.TimePerClient)
+                foreach (Client c in q.Clients.Where(a => a.atendimento))
+                {
+                    if (CurrentTurn - c.beginAtendimento == q.TimePerClient)
                     {
                         c.atendimento = false;
                         if (c.currentQueueSequence == 0)
@@ -231,7 +233,7 @@ namespace SafePI3.Classes
                         if (c.currentQueueSequence + 1 == c.QueueSequence.Count)
                         {
                             //Tirando Clientes do sistema
-                            c.TurnsInSystem = CurrentTurn - c.EntranceTurn ;
+                            c.TurnsInSystem = CurrentTurn - c.EntranceTurn;
                             FinishedClients.Add(c);
                             clientsToRemove.Add(c);
                         }
@@ -243,40 +245,48 @@ namespace SafePI3.Classes
                             Queues[c.QueueSequence[c.currentQueueSequence].ToString()].AllClients.Add(c);
                             clientsToRemove.Add(c);
                         }
-                        
+
                     }
                 }
                 q.Clients.RemoveAll(a => clientsToRemove.Contains(a));
             }
 
-            // Chegada de Atendente
+            // Zerando Atendentes que já permenaceram uma rodada
+            foreach (var q in Queues.Where(q => q.Value.OperatorsJustArrived > 0))
+            {
+                q.Value.OperatorsJustArrived -= q.Value.OperatorsQuantity;
+            }
 
+            // Chegada de Atendente
             if (ListChanges.Count(c => c.RoundArrival == CurrentTurn) > 0)
             {
                 IList<Change> ArrivingChanges = new List<Change>();
                 ArrivingChanges = ListChanges.Where(c => c.RoundArrival == CurrentTurn).ToList();
 
+
                 foreach (Change item in ArrivingChanges)
                 {
                     Queues[item.ToQueue].OperatorsQuantity += 1;
+                    Queues[item.ToQueue].OperatorsJustArrived += 1;
                     LogListChanges.Add(item);
                 }
 
-                
+
                 ListChanges.RemoveAll(c => ArrivingChanges.Contains(c));
-                
+
                 form.UpdateChangesPanel(ListChanges);
             }
 
 
             // Otimização
 
-            if (ChangeFee > 0 && Queues.Sum(q => q.Value.AllClients.Count()) > 20)
+            if (ChangeFee > 0 && CurrentTurn > 8)
             {
                 //Checar qual fila pode disponibilizar um atendente
 
                 IList<Queue> AvaiableOperators = Queues
-                                                    .Where(q => q.Value.OperatorsQuantity > q.Value.Clients.Count(c => c.atendimento))
+                                                    .Where(q => q.Value.OperatorsQuantity > q.Value.Clients.Count(c => c.atendimento)
+                                                        && q.Value.OperatorsJustArrived < q.Value.OperatorsQuantity)
                                                     .Select(q => q.Value)
                                                     .ToList();
 
@@ -293,9 +303,9 @@ namespace SafePI3.Classes
                     }
 
                     //Atualizando valores das estatisticas
-                    foreach (var sq  in statictics)
-	                {
-		                sq.Value.Operators = Queues[sq.Key].OperatorsQuantity;
+                    foreach (var sq in statictics)
+                    {
+                        sq.Value.Operators = Queues[sq.Key].OperatorsQuantity;
                         sq.Value.AllClients = Queues[sq.Key].AllClients.Where(
                                     c =>
                                         CurrentTurn - c.QueueAllEntrances[c.QueueSequence.IndexOf(sq.Key.ToCharArray()[0])] < 30)
@@ -304,7 +314,7 @@ namespace SafePI3.Classes
                         sq.Value.AllClients = sq.Value.AllClients.Distinct().ToList();
                         sq.Value.CurrentTurn = CurrentTurn;
                         sq.Value.QueueCost = Queues[sq.Key].TimePerClient;
-                        
+
                         sq.Value.UpdateStatistics();
 
                         StreamWriter logger = File.AppendText(Application.StartupPath + "\\Configs\\LogIddleRatings.txt");
@@ -315,9 +325,9 @@ namespace SafePI3.Classes
                                     "   CurrentTurn " + sq.Value.CurrentTurn);
 
                         logger.Close();
-	                }
-                    
-                    var bla = statictics.Where(s => (AvaiableOperators.Count(ao => ao.Name == s.Key) > 0 || (s.Key == "A" && Queues["A"].Clients.Count() == 0 && arquivoAcabou) && s.Value.Operators > 1 )).OrderByDescending(s => s.Value.ProbabilityOfIdle).ThenByDescending(s => s.Value.Operators);
+                    }
+
+                    var bla = statictics.Where(s => (AvaiableOperators.Count(ao => ao.Name == s.Key) > 0 || (s.Key == "A" && Queues["A"].Clients.Count() == 0 && arquivoAcabou) && s.Value.Operators > 1)).OrderByDescending(s => s.Value.ProbabilityOfIdle).ThenByDescending(s => s.Value.Operators);
 
                     //Checar os cenários e os indices de cada fila com operador disponivel para mudança
                     foreach (var sq in bla.Where(q => q.Value.ProbabilityOfIdle > 0))
@@ -336,19 +346,16 @@ namespace SafePI3.Classes
 
                             s1 = s1.Where(s => Queues[s.Key].OperatorsQuantity + ListChanges.Count(lc => lc.ToQueue == s.Key) < Queues[s.Key].ServiceDesksQuantity);
                             s1 = s1.Where(s => ((arquivoAcabou && Queues["A"].Clients.Count == 0 && s.Key == "A") ? 0 : 1) == 1);
-                            if (s1.Count() > 0) 
+                            if (s1.Count() > 0)
                             {
                                 var min = s1.Min(s => s.Value.ProbabilityOfIdle);
                                 s1 = s1.Where(s => s.Value.ProbabilityOfIdle == min);
                                 s1 = s1.Where(s => s.Key != sq.Key);
                             }
-                            
-                            
-                            
 
                             if (s1.Count() > 0)
                             {
-                                ListChanges.Add(new Change(sq.Key, s1.First().Key , CurrentTurn, CurrentTurn + ChangeFee));
+                                ListChanges.Add(new Change(sq.Key, s1.First().Key, CurrentTurn, CurrentTurn + ChangeFee));
                                 Queues[sq.Key].OperatorsQuantity -= 1;
 
                                 //Log de trocas no sistema
@@ -366,7 +373,7 @@ namespace SafePI3.Classes
                                 f.Close();
                             }
 
-                            
+
                         }
                     }
 
@@ -394,12 +401,13 @@ namespace SafePI3.Classes
             Console.WriteLine(Queues.SelectMany(a => a.Value.Clients).Count(a => a.TurnsInSystem == 0));
             if (Queues.SelectMany(a => a.Value.Clients).Count(a => a.TurnsInSystem == 0) > 0 || !arquivoAcabou)
             {
-                if (!PausedQueue) { 
+                if (!PausedQueue)
+                {
                     CurrentTurn++;
                     form.UpdateTurn(CurrentTurn.ToString());
                     form.Invalidate();
                     Application.DoEvents();
-                    
+
                 }
             }
             else
@@ -410,10 +418,16 @@ namespace SafePI3.Classes
                 Dictionary<string, double> mediumPerQueue = new Dictionary<string, double>(Queues.Count);
                 foreach (Queue q in Queues.Select(a => a.Value))
                 {
-                    mediumPerQueue.Add(q.Name,
-                        FinishedClients
-                            .Where(a => a.QueueSequence.IndexOf(char.Parse(q.Name)) > -1)
-                            .Average(a => a.QueueAllEntrances[a.QueueSequence.IndexOf(char.Parse(q.Name))]));
+                    if (q.AllClients.Count < 1)
+                        mediumPerQueue.Add(q.Name, 0);
+                    else
+                    {
+                        mediumPerQueue.Add(q.Name,
+                            FinishedClients
+                                .Where(a => a.QueueSequence.IndexOf(char.Parse(q.Name)) > -1)
+                                .Average(a => a.QueueAllEntrances[a.QueueSequence.IndexOf(char.Parse(q.Name))]));
+                    }
+
                 }
                 Client MostWaitUser = FinishedClients.OrderByDescending(a => a.TurnsInSystem).First();
 
@@ -421,7 +435,7 @@ namespace SafePI3.Classes
 
                 foreach (string sequence in FinishedClients.Select(a => a.QueueSequence).Select(a => string.Join("|", a)).Distinct())
                 {
-                    mediumPerCombination.Add(sequence , FinishedClients
+                    mediumPerCombination.Add(sequence, FinishedClients
                                                     .Where(a => String.Join("|", a.QueueSequence) == sequence)
                                                     .Average(a => a.TurnsInSystem));
                 }
@@ -432,14 +446,14 @@ namespace SafePI3.Classes
                 Results resultado = new Results();
                 resultado.LoadResults(mediumTimeSystem, mediumPerQueue, MostWaitUser, mediumPerCombination, CurrentTurn);
                 resultado.Show();
-                
+
 
 
             }
-                
+
 
         }
-        
+
         public void PauseQueue()
         {
             PausedQueue = true;
@@ -450,7 +464,7 @@ namespace SafePI3.Classes
             speed = _speed;
             GeneralTimer.Interval = 1000 / (int)speed;
         }
-        
+
         public void Dispose()
         {
             try
@@ -462,7 +476,7 @@ namespace SafePI3.Classes
             {
 
             }
-           
+
         }
     }
 }
